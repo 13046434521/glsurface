@@ -1,0 +1,2 @@
+include ':app',':glsurface'
+rootProject.name='GLSurface'
