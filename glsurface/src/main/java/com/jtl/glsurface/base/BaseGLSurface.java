@@ -1,9 +1,12 @@
 package com.jtl.glsurface.base;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+
+import com.jtl.glsurface.R;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -17,6 +20,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Renderer {
     private int mRatioWidth = 0;
     private int mRatioHeight = 0;
+    private int mRenderMode = 0;
 
     public BaseGLSurface(Context context) {
         this(context, null);
@@ -25,8 +29,13 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
     public BaseGLSurface(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        if (attrs != null) {
+            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BaseGLSurface);
+            mRenderMode = array.getInteger(R.styleable.BaseGLSurface_renderMode, 0);
+        }
         init();
     }
+
 
     private void init() {
         this.setPreserveEGLContextOnPause(true); // GLSurfaceView  onPause和onResume切换时，是否保留EGLContext上下文
@@ -34,7 +43,7 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
         this.setEGLConfigChooser(8, 8, 8, 8, 24, 0); //深度位数，在setRender之前调用
 
         this.setRenderer(this);
-        this.setRenderMode(RENDERMODE_CONTINUOUSLY);//RENDERMODE_CONTINUOUSLY 或者 RENDERMODE_WHEN_DIRTY
+        this.setRenderMode(mRenderMode);//RENDERMODE_CONTINUOUSLY 或者 RENDERMODE_WHEN_DIRTY
     }
 
     @Override

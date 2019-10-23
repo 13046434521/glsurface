@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BaseGLSurface">
+        <attr name="renderMode" format="enum">
+            <enum name="when_dirty" value="0" />
+            <enum name="continuously" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>
