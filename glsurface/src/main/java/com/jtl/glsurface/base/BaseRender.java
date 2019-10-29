@@ -8,8 +8,13 @@ import android.content.Context;
  * 描述: BaseRender接口
  * 更改:
  */
-public  interface BaseRender {
-     void createdGLThread(Context context);
+public interface BaseRender {
 
-     void onSurfaceChanged(float width, float height);
+    static float width = 640;
+
+    float height = 480;
+
+    void createdGLThread(Context context);
+
+    void onSurfaceChanged(float width, float height);
 }

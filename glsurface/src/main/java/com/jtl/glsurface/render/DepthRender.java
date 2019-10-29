@@ -106,7 +106,6 @@ public class DepthRender implements BaseRender {
 
     @Override
     public void onSurfaceChanged(float width, float height) {
-
         ShaderHelper.checkGLError("onSurfaceChanged");
     }
 
