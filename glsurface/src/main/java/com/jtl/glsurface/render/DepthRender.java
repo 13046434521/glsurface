@@ -3,12 +3,15 @@ package com.jtl.glsurface.render;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.jtl.glsurface.Constant;
 import com.jtl.glsurface.base.BaseRender;
 import com.jtl.glsurface.helper.ShaderHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
+import androidx.annotation.Nullable;
 
 /**
  * @author jtl
@@ -58,7 +61,13 @@ public class DepthRender implements BaseRender {
     private int vertexHandle;
     private int texCoordHandle;
     private int samplerHandle;
+    private int mWidth;
+    private int mHeight;
 
+    public DepthRender() {
+        this.mWidth = Constant.WIDTH;
+        this.mHeight = Constant.HEIGHT;
+    }
     @Override
     public void createdGLThread(Context context) {
         // 生成纹理id
@@ -109,10 +118,22 @@ public class DepthRender implements BaseRender {
         ShaderHelper.checkGLError("onSurfaceChanged");
     }
 
-    public void onDraw(ByteBuffer data){
-        if (data == null) {
-            return;
-        }
+
+    public void onDraw(ByteBuffer depthData){
+        onDraw(depthData, mWidth, mHeight,Constant.RENDER_RGB);
+    }
+
+    public void onDraw(ByteBuffer depthData,@Constant.RenderType int renderType){
+        onDraw(depthData, mWidth, mHeight,renderType);
+    }
+    public void onDraw(ByteBuffer depthData,int width,int height){
+        onDraw(depthData, width, height,Constant.RENDER_RGB);
+    }
+
+    public void onDraw(@Nullable ByteBuffer depthData, @Nullable int width,@Nullable int height, @Constant.RenderType int renderType) {
+
+        mWidth = width;
+        mHeight = height;
 
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
         GLES20.glDepthMask(false);
@@ -136,7 +157,7 @@ public class DepthRender implements BaseRender {
         GLES20.glEnableVertexAttribArray(vertexHandle);
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_LUMINANCE_ALPHA,640,480,0,GLES20.GL_LUMINANCE_ALPHA,GLES20.GL_UNSIGNED_BYTE,data);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,renderType,mWidth,mHeight,0,renderType,GLES20.GL_UNSIGNED_BYTE,depthData);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 

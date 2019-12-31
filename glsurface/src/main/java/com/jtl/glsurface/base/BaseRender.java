@@ -10,9 +10,9 @@ import android.content.Context;
  */
 public interface BaseRender {
 
-    static float width = 640;
+    final int width = 640;
 
-    float height = 480;
+    final  int height = 480;
 
     void createdGLThread(Context context);
 

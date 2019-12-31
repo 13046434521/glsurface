@@ -1,5 +1,7 @@
 package com.jtl.glsurface;
 
+import android.opengl.GLES20;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -40,6 +42,16 @@ public class Constant {
     public @interface CameraType {
     }
 
-    public static final int WIDTH = 1920;
-    public static final int HEIGHT = 1080;
+    public static final int RENDER_RGB = GLES20.GL_RGB;
+    public static final int RENDER_RGBA = GLES20.GL_RGBA;
+    public static final int RENDER_LUMINANCE_ALPHA = GLES20.GL_LUMINANCE_ALPHA;
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD})
+    @IntDef({RENDER_RGB, RENDER_RGBA})
+    public @interface RenderType {
+    }
+
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 480;
 }

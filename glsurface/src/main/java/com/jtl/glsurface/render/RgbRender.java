@@ -3,12 +3,15 @@ package com.jtl.glsurface.render;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.jtl.glsurface.Constant;
 import com.jtl.glsurface.base.BaseRender;
 import com.jtl.glsurface.helper.ShaderHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
+import androidx.annotation.Nullable;
 
 /**
  * RgbRender
@@ -49,6 +52,8 @@ public class RgbRender implements BaseRender {
     private int vertexHandle;
     private int texCoordHandle;
     private int samplerHandle;
+    private int mWidth;
+    private int mHeight;
 
     /**
      * 顶点坐标
@@ -67,6 +72,11 @@ public class RgbRender implements BaseRender {
             1.0f, 1.0f,
             1.0f, 0.0f,
     };
+
+    public RgbRender() {
+        this.mWidth = Constant.WIDTH;
+        this.mHeight = Constant.HEIGHT;
+    }
 
     @Override
     public void createdGLThread(Context context) {
@@ -122,11 +132,21 @@ public class RgbRender implements BaseRender {
         ShaderHelper.checkGLError("onSurfaceChanged");
     }
 
+    public void onDraw(ByteBuffer rgbData){
+        onDraw(rgbData, mWidth, mHeight,Constant.RENDER_RGB);
+    }
 
-    public void onDraw(ByteBuffer rgbData) {
-        if (rgbData == null) {
-            return;
-        }
+    public void onDraw(ByteBuffer rgbData,@Constant.RenderType int renderType){
+        onDraw(rgbData, mWidth, mHeight,renderType);
+    }
+    public void onDraw(ByteBuffer rgbData,int width,int height){
+        onDraw(rgbData, width, height,Constant.RENDER_RGB);
+    }
+
+    public void onDraw(@Nullable ByteBuffer rgbData, @Nullable int width,@Nullable int height, @Constant.RenderType int renderType) {
+
+        mWidth = width;
+        mHeight = height;
 
         GLES20.glUseProgram(mProgram);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
@@ -147,7 +167,7 @@ public class RgbRender implements BaseRender {
         GLES20.glEnableVertexAttribArray(texCoordHandle);
 
         GLES20.glUniform1i(samplerHandle, 0);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, 640, 480, 0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_BYTE, rgbData);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, renderType, mWidth, mHeight, 0, renderType, GLES20.GL_UNSIGNED_BYTE, rgbData);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
         GLES20.glDisableVertexAttribArray(vertexHandle);
