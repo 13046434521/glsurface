@@ -1,14 +1,11 @@
 package com.jtl.glsurface;
 
-import android.opengl.GLES20;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.StringDef;
 
 /**
  * 作者:jtl
@@ -29,27 +26,6 @@ public class Constant {
     @Target({ElementType.PARAMETER, ElementType.FIELD})
     @IntDef({RGB, YUV420P_NV12, YUV420P_NV21, YUV420SP_YU12, YUV420SP_YV12, YUV_Y})
     public @interface CameraData {
-    }
-
-    public static final String CAMERA_BACK = "0";
-    public static final String CAMERA_FRONT = "1";
-    public static @CameraType
-    String CAMERA_TYPE = CAMERA_BACK;
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD})
-    @StringDef({CAMERA_BACK, CAMERA_FRONT})
-    public @interface CameraType {
-    }
-
-    public static final int RENDER_RGB = GLES20.GL_RGB;
-    public static final int RENDER_RGBA = GLES20.GL_RGBA;
-    public static final int RENDER_LUMINANCE_ALPHA = GLES20.GL_LUMINANCE_ALPHA;
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD})
-    @IntDef({RENDER_RGB, RENDER_RGBA})
-    public @interface RenderType {
     }
 
     public static final int WIDTH = 640;

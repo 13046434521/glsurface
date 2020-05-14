@@ -4,8 +4,6 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import com.jtl.glsurface.base.BaseRender;
-import com.jtl.glsurface.base.ICameraYUV;
 import com.jtl.glsurface.helper.ShaderHelper;
 
 import java.nio.ByteBuffer;
@@ -18,10 +16,11 @@ import java.nio.FloatBuffer;
  * 描述:渲染YUV的Y分量
  * 更改:
  */
-public class YRender implements BaseRender, ICameraYUV {
+public class YRender implements IBaseRender {
     private static final String TAG = YRender.class.getSimpleName();
     private static final String VERTEX_SHADER_NAME = "shader/yuv_y_vert.glsl";
     private static final String FRAGMENT_SHADER_NAME = "shader/yuv_y_frag.glsl";
+    private int rotate = -90;
     //纹理坐标
     private float[] textureCoord = new float[]{
             0.0f, 0.0f,
@@ -117,7 +116,12 @@ public class YRender implements BaseRender, ICameraYUV {
     }
 
     @Override
-    public void onDraw(ByteBuffer yData, ByteBuffer uvData) {
+    public void onDraw(ByteBuffer buffer) {
+        onDraw(buffer, width, height);
+    }
+
+    @Override
+    public void onDraw(ByteBuffer yData, int width, int height) {
         GLES20.glUseProgram(mProgram);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[0]);
@@ -140,7 +144,7 @@ public class YRender implements BaseRender, ICameraYUV {
         ShaderHelper.checkGLError("onDraw");
     }
 
-    @Override
+
     public void setRotate(int rotate) {
         Matrix.setIdentityM(mMVPMatrix, 0);
         Matrix.setRotateM(mMVPMatrix, 0, rotate, 0, 0, 1);

@@ -1,6 +1,8 @@
-package com.jtl.glsurface.base;
+package com.jtl.glsurface.render;
 
 import android.content.Context;
+
+import java.nio.ByteBuffer;
 
 /**
  * 作者:jtl
@@ -8,13 +10,13 @@ import android.content.Context;
  * 描述: BaseRender接口
  * 更改:
  */
-public interface BaseRender {
-
-    final int width = 640;
-
-    final  int height = 480;
+public interface IBaseRender {
 
     void createdGLThread(Context context);
 
     void onSurfaceChanged(float width, float height);
+
+    void onDraw(ByteBuffer buffer);
+
+    void onDraw(ByteBuffer buffer, int width, int height);
 }

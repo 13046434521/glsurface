@@ -1,4 +1,4 @@
-package com.jtl.glsurface.base;
+package com.jtl.glsurface.gl;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +7,9 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 import com.jtl.glsurface.R;
+import com.jtl.glsurface.render.IBaseRender;
+
+import java.nio.ByteBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -18,12 +21,13 @@ import javax.microedition.khronos.opengles.GL10;
  * 更改:
  */
 public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Renderer {
-    private int mRatioWidth = 0;
-    private int mRatioHeight = 0;
     private int mRenderMode = 0;
-
+    public int width;
+    public int height;
+    private IBaseRender mRender;
+    private ByteBuffer mDataBuffer;
     public BaseGLSurface(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public BaseGLSurface(Context context, AttributeSet attrs) {
@@ -36,7 +40,6 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
         init();
     }
 
-
     private void init() {
         this.setPreserveEGLContextOnPause(true); // GLSurfaceView  onPause和onResume切换时，是否保留EGLContext上下文
         this.setEGLContextClientVersion(2); //OpenGL ES 的版本
@@ -46,43 +49,41 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
         this.setRenderMode(mRenderMode);//RENDERMODE_CONTINUOUSLY 或者 RENDERMODE_WHEN_DIRTY
     }
 
+    public void setRender(IBaseRender render) {
+        this.mRender = render;
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(1, 1, 1, 0);
+        if (mRender != null) {
+            mRender.createdGLThread(this.getContext());
+        }
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
+        if (mRender != null) {
+            mRender.onSurfaceChanged(width, height);
+        }
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        if (mRender != null && mDataBuffer != null) {
+            mRender.onDraw(mDataBuffer, width, height);
+        }
     }
 
-    public void setAspectRatio(int width, int height) {
-        if (width < 0 || height < 0) {
-            throw new IllegalArgumentException("Size cannot be negative.");
-        }
-        mRatioWidth = width;
-        mRatioHeight = height;
-        requestLayout();
+    public void updateImage(ByteBuffer dataBuffer) {
+        this.mDataBuffer = dataBuffer;
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        if (0 == mRatioWidth || 0 == mRatioHeight) {
-            setMeasuredDimension(width, height);
-        } else {
-            if (width < height * mRatioWidth / mRatioHeight) {
-                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
-            } else {
-                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
-            }
-        }
+    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+        this.mDataBuffer = dataBuffer;
+        this.width = width;
+        this.height = height;
     }
 }

@@ -2,8 +2,8 @@ package com.jtl.glsurface.gl;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
-import com.jtl.glsurface.base.BaseGLSurface;
 import com.jtl.glsurface.render.RgbRender;
 
 import java.nio.ByteBuffer;
@@ -18,6 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
  * @date 2019/9/26
  */
 public class RgbGLSurface extends BaseGLSurface {
+    private static final String TAG = RgbGLSurface.class.getSimpleName();
     private ByteBuffer rgbImage;
 
     private RgbRender rgbRender;
@@ -30,9 +31,6 @@ public class RgbGLSurface extends BaseGLSurface {
         super(context, attrs);
     }
 
-    public void updateColorImage(ByteBuffer rgbImage){
-        this.rgbImage = rgbImage;
-    }
 
     @Override
     public void onPause() {
@@ -56,9 +54,21 @@ public class RgbGLSurface extends BaseGLSurface {
     public void onDrawFrame(GL10 gl) {
         super.onDrawFrame(gl);
 
-        if (rgbImage == null){
+        if (rgbImage == null || width <= 0 || height <= 0) {
+            Log.w(TAG, "参数错误");
             return;
         }
-        rgbRender.onDraw(rgbImage);
+        rgbRender.onDraw(rgbImage, width, height);
+    }
+
+    public void updateImage(ByteBuffer rgbImage) {
+        this.rgbImage = rgbImage;
+    }
+
+    @Override
+    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+        this.rgbImage = dataBuffer;
+        this.width = width;
+        this.height = height;
     }
 }

@@ -3,7 +3,6 @@ package com.jtl.glsurface.gl;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.jtl.glsurface.base.BaseGLSurface;
 import com.jtl.glsurface.render.DepthRender;
 
 import java.nio.ByteBuffer;
@@ -20,6 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class DepthGLSurface extends BaseGLSurface {
     private DepthRender mDepthRender;
     private ByteBuffer depthImage;
+
     public DepthGLSurface(Context context) {
         super(context);
     }
@@ -31,7 +31,7 @@ public class DepthGLSurface extends BaseGLSurface {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         super.onSurfaceCreated(gl, config);
-        mDepthRender=new DepthRender();
+        mDepthRender = new DepthRender();
         mDepthRender.createdGLThread(getContext().getApplicationContext());
     }
 
@@ -44,12 +44,20 @@ public class DepthGLSurface extends BaseGLSurface {
     public void onDrawFrame(GL10 gl) {
         super.onDrawFrame(gl);
 
-        if (mDepthRender!=null){
+        if (mDepthRender != null) {
             mDepthRender.onDraw(depthImage);
         }
     }
 
-    public void updateDepthImage(ByteBuffer depthImage){
-        this.depthImage = depthImage;
+    @Override
+    public void updateImage(ByteBuffer dataBuffer) {
+        this.depthImage = dataBuffer;
+    }
+
+    @Override
+    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+        this.depthImage = dataBuffer;
+        this.width = width;
+        this.height = height;
     }
 }

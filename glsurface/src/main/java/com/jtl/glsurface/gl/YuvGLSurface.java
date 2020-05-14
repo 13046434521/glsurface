@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import com.jtl.glsurface.Constant;
 import com.jtl.glsurface.render.YRender;
 import com.jtl.glsurface.render.YuvRender;
-import com.jtl.glsurface.base.BaseGLSurface;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,7 +13,6 @@ import java.nio.ByteOrder;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static com.jtl.glsurface.Constant.CAMERA_BACK;
 import static com.jtl.glsurface.Constant.YUV420P_NV12;
 import static com.jtl.glsurface.Constant.YUV_Y;
 
@@ -36,8 +34,6 @@ public class YuvGLSurface extends BaseGLSurface {
     private @Constant.CameraData
     int mCameraType = YUV420P_NV12;
 
-    private @Constant.CameraType
-    String mCameraId = CAMERA_BACK;
     public YuvGLSurface(Context context) {
         super(context);
     }
@@ -82,27 +78,30 @@ public class YuvGLSurface extends BaseGLSurface {
     public void onDrawFrame(GL10 gl) {
         super.onDrawFrame(gl);
         if (mCameraType == YUV420P_NV12) {
-            mYuvRender.setRotate(mCameraId.equals(CAMERA_BACK) ? -90 : 90);
             mYuvRender.onDraw(mYBuffer, mUVBuffer);
         } else if (mCameraType == YUV_Y) {
-            mYRender.setRotate(mCameraId.equals(CAMERA_BACK) ? -90 : 90);
-            mYRender.onDraw(mYBuffer, mUVBuffer);
+            mYRender.onDraw(mYBuffer);
         }
     }
 
-    public void setCameraData(@Constant.CameraType String cameraId, byte[] data) {
-        if (data != null && data.length > 0) {
-            mCameraId = cameraId;
+    @Override
+    public void updateImage(ByteBuffer dataBuffer) {
 
+    }
+
+    @Override
+    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public void setCameraData(byte[] data) {
+        if (data != null && data.length > 0) {
             System.arraycopy(data, 0, mYData, 0, mYData.length);
             System.arraycopy(data, mYData.length, mUVData, 0, mUVData.length);
 
             mYBuffer.put(mYData).position(0);
             mUVBuffer.put(mUVData).position(0);
         }
-    }
-
-    public void setCameraDataType(@Constant.CameraData int cameraDataType) {
-        this.mCameraType = cameraDataType;
     }
 }
