@@ -1,10 +1,10 @@
-package com.jtl.glsurface.gl;
+package com.jtl.surface.gl;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.jtl.glsurface.render.RgbRender;
+import com.jtl.surface.render.RgbRender;
 
 import java.nio.ByteBuffer;
 

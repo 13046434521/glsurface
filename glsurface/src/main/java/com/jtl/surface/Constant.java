@@ -1,4 +1,4 @@
-package com.jtl.glsurface;
+package com.jtl.surface;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

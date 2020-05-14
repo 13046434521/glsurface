@@ -1,9 +1,9 @@
-package com.jtl.glsurface.render;
+package com.jtl.surface.render;
 
 import android.content.Context;
 import android.opengl.GLES20;
 
-import com.jtl.glsurface.helper.ShaderHelper;
+import com.jtl.surface.helper.ShaderHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -1,15 +1,14 @@
-package com.jtl.glsurface.render;
+package com.jtl.surface.render;
 
 import android.content.Context;
 import android.opengl.GLES20;
 
-import com.jtl.glsurface.helper.ShaderHelper;
+import com.jtl.surface.helper.ShaderHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import androidx.annotation.Nullable;
 
 /**
  * @author jtl
@@ -116,7 +115,7 @@ public class DepthRender implements IBaseRender {
         onDraw(depthData, mWidth, mHeight);
     }
 
-    public void onDraw(@Nullable ByteBuffer depthData, @Nullable int width, @Nullable int height) {
+    public void onDraw(ByteBuffer depthData, int width, int height) {
 
         mWidth = width;
         mHeight = height;

@@ -1,4 +1,4 @@
-package com.jtl.glsurface;
+package com.jtl.surface;
 
 import android.os.Environment;
 import android.os.StatFs;

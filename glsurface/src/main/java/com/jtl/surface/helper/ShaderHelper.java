@@ -1,4 +1,4 @@
-package com.jtl.glsurface.helper;
+package com.jtl.surface.helper;
 
 import android.content.Context;
 import android.opengl.GLES20;

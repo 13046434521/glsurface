@@ -1,4 +1,4 @@
-package com.jtl.glsurface.render;
+package com.jtl.surface.render;
 
 import android.content.Context;
 

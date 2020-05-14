@@ -1,9 +1,9 @@
-package com.jtl.glsurface.gl;
+package com.jtl.surface.gl;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.jtl.glsurface.render.DepthRender;
+import com.jtl.surface.render.DepthRender;
 
 import java.nio.ByteBuffer;
 

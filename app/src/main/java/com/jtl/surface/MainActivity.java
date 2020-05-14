@@ -1,11 +1,13 @@
-package com.jtl.glsurface;
+package com.jtl.surface;
 
 import android.os.Bundle;
 
-import com.jtl.glsurface.gl.BaseGLSurface;
-import com.jtl.glsurface.gl.RgbGLSurface;
-import com.jtl.glsurface.render.DepthRender;
-import com.jtl.glsurface.render.RgbRender;
+import com.jtl.surface.gl.BaseGLSurface;
+import com.jtl.surface.gl.YuvGLSurface;
+import com.jtl.surface.render.DepthRender;
+import com.jtl.surface.render.RgbRender;
+import com.jtl.surface.render.YRender;
+import com.jtl.surface.render.YuvRender;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -17,9 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     DepthRender depthRender;
     private BaseGLSurface mBaseGLSurface;
-    private RgbGLSurface mRgbGLSurface;
+    private YuvGLSurface mRgbGLSurface;
     private ExecutorService executorService;
     private RgbRender mRgbRender;
+    private YuvRender mYuvRender;
+    private YRender mYRender;
     private ByteBuffer mByteBuffer;
 
     @Override
@@ -31,20 +35,26 @@ public class MainActivity extends AppCompatActivity {
         PermissionHelper.requestStoragePermission(this);
         mRgbRender = new RgbRender();
         depthRender = new DepthRender();
-
-        mBaseGLSurface.setRender(depthRender);
+        mYuvRender = new YuvRender();
+        mYRender = new YRender();
+        mBaseGLSurface.setRender(mYRender);
 
         executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    mByteBuffer = ByteBuffer.allocateDirect(640 * 480 * 2).order(ByteOrder.nativeOrder());
-                    mByteBuffer = FileHelper.getInstance().readLocalFileByteBuffer(FileHelper.getInstance().getFaceImageFolderPath() + "二维码丢帧0depth.raw", 640 * 480 * 2, mByteBuffer);
+                    String name = "/sdcard/IMIFace/FaceImage/1280_960_262.yuv";
+                    if (mByteBuffer == null) {
+                        mByteBuffer = ByteBuffer.allocateDirect(1280 * 960 * 3 / 2).order(ByteOrder.nativeOrder());
+                        mByteBuffer = FileHelper.getInstance().readLocalFileByteBuffer(FileHelper.getInstance().getFaceImageFolderPath() + "1280_960_262.yuv", 960 * 1280 * 3 / 2, mByteBuffer);
+                    }
 
-                    mBaseGLSurface.updateImage(mByteBuffer, 640, 480);
+                    mBaseGLSurface.updateImage(mByteBuffer, 1280, 960);
                     mBaseGLSurface.requestRender();
-                    mRgbGLSurface.updateImage(mByteBuffer, 640, 480);
+//
+                    mRgbGLSurface.updateImage(mByteBuffer, 1280, 960);
+                    mRgbGLSurface.requestRender();
                 }
             }
         });

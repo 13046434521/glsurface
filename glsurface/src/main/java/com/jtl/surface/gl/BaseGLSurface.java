@@ -1,4 +1,4 @@
-package com.jtl.glsurface.gl;
+package com.jtl.surface.gl;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -6,8 +6,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.jtl.glsurface.R;
-import com.jtl.glsurface.render.IBaseRender;
+import com.jtl.surface.R;
+import com.jtl.surface.render.IBaseRender;
 
 import java.nio.ByteBuffer;
 
