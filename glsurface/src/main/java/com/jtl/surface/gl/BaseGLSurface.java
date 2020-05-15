@@ -67,7 +67,7 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
         if (mRender != null) {
-            mRender.onSurfaceChanged(width, height);
+            mRender.onSurfaceChanged(mPreviewWidth, mPreviewHeight);
         }
     }
 
@@ -87,5 +87,21 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
         this.mDataBuffer = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
+    }
+
+    public int getPreviewWidth() {
+        return mPreviewWidth;
+    }
+
+    public void setPreviewWidth(int previewWidth) {
+        mPreviewWidth = previewWidth;
+    }
+
+    public int getPreviewHeight() {
+        return mPreviewHeight;
+    }
+
+    public void setPreviewHeight(int previewHeight) {
+        mPreviewHeight = previewHeight;
     }
 }

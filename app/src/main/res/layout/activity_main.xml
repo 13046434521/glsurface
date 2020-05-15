@@ -15,12 +15,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:preview_height="480"
-        app:preview_width="640"
+        app:preview_height="960"
+        app:preview_width="1280"
         app:renderMode="when_dirty" />
 
     <com.jtl.surface.gl.YuvGLSurface
-        android:id="@+id/rgb"
+        android:id="@+id/yuv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -28,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/base"
-        app:preview_height="480"
-        app:preview_width="640"
+        app:preview_height="960"
+        app:preview_width="1280"
         app:renderMode="when_dirty" />
 </androidx.constraintlayout.widget.ConstraintLayout>

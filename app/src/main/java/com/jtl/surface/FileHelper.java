@@ -23,8 +23,6 @@ public class FileHelper {
     private static final String TAG = FileHelper.class.getSimpleName();
     private static String mSDCardFolderPath;
     private static String mFaceImageFolderPath;
-    private static String mFaceModelFolderPath;
-    private static String mFaceImiBinFolderPath;
     private static String mFaceTestFolderPath;
 
     private FileHelper() {
@@ -38,15 +36,13 @@ public class FileHelper {
     public void init() {
         mSDCardFolderPath = getSDCardFolderPath();
         mFaceImageFolderPath = getFaceImageFolderPath();
-        mFaceModelFolderPath = getFaceModelFolderPath();
-        mFaceImiBinFolderPath = getFaceImiBinFolderPath();
         mFaceTestFolderPath = getFaceTestFolderPath();
     }
 
 
     public String getSDCardFolderPath() {
         if (TextUtils.isEmpty(mSDCardFolderPath)) {
-            mSDCardFolderPath = Environment.getExternalStorageDirectory().getPath() + "/IMIFace/";
+            mSDCardFolderPath = Environment.getExternalStorageDirectory().getPath() + "/GLSurface/";
         }
         mkdirs(mSDCardFolderPath);
 
@@ -55,34 +51,17 @@ public class FileHelper {
 
     public String getFaceImageFolderPath() {
         if (TextUtils.isEmpty(mFaceImageFolderPath)) {
-            mFaceImageFolderPath = getSDCardFolderPath() + "FaceImage/";
+            mFaceImageFolderPath = getSDCardFolderPath() + "GL_Image/";
         }
         mkdirs(mFaceImageFolderPath);
 
         return mFaceImageFolderPath;
     }
 
-    public String getFaceModelFolderPath() {
-        if (TextUtils.isEmpty(mFaceModelFolderPath)) {
-            mFaceModelFolderPath = getSDCardFolderPath() + "FaceModel/faceidcom_02.00.14.200506_1.1.3/";
-        }
-        mkdirs(mFaceModelFolderPath);
-
-        return mFaceModelFolderPath;
-    }
-
-    public String getFaceImiBinFolderPath() {
-        if (TextUtils.isEmpty(mFaceImiBinFolderPath)) {
-            mFaceImiBinFolderPath = getSDCardFolderPath() + "FaceImiBin/";
-        }
-        mkdirs(mFaceImiBinFolderPath);
-
-        return mFaceImiBinFolderPath;
-    }
 
     public String getFaceTestFolderPath() {
         if (TextUtils.isEmpty(mFaceTestFolderPath)) {
-            mFaceTestFolderPath = getSDCardFolderPath() + "FaceTest/";
+            mFaceTestFolderPath = getSDCardFolderPath() + "GL_Test/";
         }
         mkdirs(mFaceTestFolderPath);
 
@@ -291,7 +270,7 @@ public class FileHelper {
             Log.w(TAG, "IOException:" + e.getMessage());
         }
 
-        return byteBuffer;
+        return null;
     }
 
     /**

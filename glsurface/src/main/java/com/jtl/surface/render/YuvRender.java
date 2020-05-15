@@ -137,7 +137,7 @@ public class YuvRender implements IBaseRender {
 
     @Override
     public void onDraw(ByteBuffer buffer) {
-
+        onDraw(buffer, width, height);
     }
 
     @Override

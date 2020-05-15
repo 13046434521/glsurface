@@ -9,15 +9,17 @@ import com.jtl.surface.render.RgbRender;
 import com.jtl.surface.render.YRender;
 import com.jtl.surface.render.YuvRender;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    DepthRender depthRender;
+    private DepthRender depthRender;
     private BaseGLSurface mBaseGLSurface;
     private YuvGLSurface mRgbGLSurface;
     private ExecutorService executorService;
@@ -25,36 +27,59 @@ public class MainActivity extends AppCompatActivity {
     private YuvRender mYuvRender;
     private YRender mYRender;
     private ByteBuffer mByteBuffer;
+    private int width = 1280;
+    private int height = 960;
+    private CountDownLatch mCountDownLatch = new CountDownLatch(1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBaseGLSurface = findViewById(R.id.base);
-        mRgbGLSurface = findViewById(R.id.rgb);
+        mRgbGLSurface = findViewById(R.id.yuv);
         PermissionHelper.requestStoragePermission(this);
         mRgbRender = new RgbRender();
         depthRender = new DepthRender();
         mYuvRender = new YuvRender();
         mYRender = new YRender();
-        mBaseGLSurface.setRender(mYRender);
+        mBaseGLSurface.setRender(mYuvRender);
 
-        executorService = Executors.newSingleThreadExecutor();
+        executorService = Executors.newFixedThreadPool(2);
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    String name = "/sdcard/IMIFace/FaceImage/1280_960_262.yuv";
-                    if (mByteBuffer == null) {
-                        mByteBuffer = ByteBuffer.allocateDirect(1280 * 960 * 3 / 2).order(ByteOrder.nativeOrder());
-                        mByteBuffer = FileHelper.getInstance().readLocalFileByteBuffer(FileHelper.getInstance().getFaceImageFolderPath() + "1280_960_262.yuv", 960 * 1280 * 3 / 2, mByteBuffer);
-                    }
+                try {
+                    mCountDownLatch.await();
+                    while (true) {
+                        String name = "/sdcard/GLSurface/GL_Image/1280_960_262.yuv";
+                        if (mByteBuffer == null) {
+                            mByteBuffer = ByteBuffer.allocateDirect(width * height * 3 / 2).order(ByteOrder.nativeOrder());
+                            mByteBuffer = FileHelper.getInstance().readLocalFileByteBuffer(name, width * height * 3 / 2, mByteBuffer);
+                        }
 
-                    mBaseGLSurface.updateImage(mByteBuffer, 1280, 960);
-                    mBaseGLSurface.requestRender();
-//
-                    mRgbGLSurface.updateImage(mByteBuffer, 1280, 960);
-                    mRgbGLSurface.requestRender();
+                        mBaseGLSurface.updateImage(mByteBuffer);
+                        mBaseGLSurface.requestRender();
+
+                        mRgbGLSurface.updateImage(mByteBuffer);
+                        mRgbGLSurface.requestRender();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String[] paths = getAssets().list("image");
+                    for (String path : paths) {
+                        FileHelper.getInstance().copy(getAssets().open("image/" + path), FileHelper.getInstance().getFaceImageFolderPath() + path, false);
+                    }
+                    mCountDownLatch.countDown();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
