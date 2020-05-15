@@ -5,5 +5,7 @@
             <enum name="when_dirty" value="0" />
             <enum name="continuously" value="1" />
         </attr>
+        <attr name="preview_width" format="integer"></attr>
+        <attr name="preview_height" format="integer"></attr>
     </declare-styleable>
 </resources>

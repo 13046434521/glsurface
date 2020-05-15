@@ -54,11 +54,11 @@ public class RgbGLSurface extends BaseGLSurface {
     public void onDrawFrame(GL10 gl) {
         super.onDrawFrame(gl);
 
-        if (rgbImage == null || width <= 0 || height <= 0) {
+        if (rgbImage == null || mPreviewWidth <= 0 || mPreviewHeight <= 0) {
             Log.w(TAG, "参数错误");
             return;
         }
-        rgbRender.onDraw(rgbImage, width, height);
+        rgbRender.onDraw(rgbImage, mPreviewWidth, mPreviewHeight);
     }
 
     public void updateImage(ByteBuffer rgbImage) {
@@ -68,7 +68,7 @@ public class RgbGLSurface extends BaseGLSurface {
     @Override
     public void updateImage(ByteBuffer dataBuffer, int width, int height) {
         this.rgbImage = dataBuffer;
-        this.width = width;
-        this.height = height;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
     }
 }

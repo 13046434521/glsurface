@@ -3,7 +3,6 @@ package com.jtl.surface.gl;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.jtl.surface.Constant;
 import com.jtl.surface.render.YuvRender;
 
 import java.nio.ByteBuffer;
@@ -19,8 +18,6 @@ import javax.microedition.khronos.opengles.GL10;
  * 更改:
  */
 public class YuvGLSurface extends BaseGLSurface {
-    private int width = Constant.WIDTH;
-    private int height = Constant.HEIGHT;
     private ByteBuffer mYUVBuffer;
     private YuvRender mYuvRender;
 
@@ -35,7 +32,7 @@ public class YuvGLSurface extends BaseGLSurface {
     }
 
     private void initData() {
-        mYUVBuffer = ByteBuffer.allocateDirect(width * height * 3 / 2);
+        mYUVBuffer = ByteBuffer.allocateDirect(mPreviewWidth * mPreviewHeight * 3 / 2);
         mYUVBuffer.order(ByteOrder.nativeOrder());
         mYUVBuffer.position(0);
     }
@@ -52,26 +49,26 @@ public class YuvGLSurface extends BaseGLSurface {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
 
-        mYuvRender.onSurfaceChanged(this.width, this.height);
+        mYuvRender.onSurfaceChanged(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         super.onDrawFrame(gl);
         if (mYuvRender != null) {
-            mYuvRender.onDraw(mYUVBuffer, width, height);
+            mYuvRender.onDraw(mYUVBuffer, mPreviewWidth, mPreviewHeight);
         }
     }
 
     @Override
     public void updateImage(ByteBuffer dataBuffer) {
-
+        mYUVBuffer = dataBuffer;
     }
 
     @Override
     public void updateImage(ByteBuffer dataBuffer, int width, int height) {
-        this.width = width;
-        this.height = height;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
         mYUVBuffer = dataBuffer;
     }
 }

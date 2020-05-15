@@ -22,8 +22,8 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Renderer {
     private int mRenderMode = 0;
-    public int width;
-    public int height;
+    public int mPreviewWidth;
+    public int mPreviewHeight;
     private IBaseRender mRender;
     private ByteBuffer mDataBuffer;
     public BaseGLSurface(Context context) {
@@ -36,6 +36,8 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.BaseGLSurface);
             mRenderMode = array.getInteger(R.styleable.BaseGLSurface_renderMode, 0);
+            mPreviewWidth = array.getInteger(R.styleable.BaseGLSurface_preview_width, 0);
+            mPreviewHeight = array.getInteger(R.styleable.BaseGLSurface_preview_height, 0);
         }
         init();
     }
@@ -73,7 +75,7 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         if (mRender != null && mDataBuffer != null) {
-            mRender.onDraw(mDataBuffer, width, height);
+            mRender.onDraw(mDataBuffer, mPreviewWidth, mPreviewHeight);
         }
     }
 
@@ -83,7 +85,7 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
 
     public void updateImage(ByteBuffer dataBuffer, int width, int height) {
         this.mDataBuffer = dataBuffer;
-        this.width = width;
-        this.height = height;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
     }
 }

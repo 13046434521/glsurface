@@ -57,7 +57,7 @@ public class DepthGLSurface extends BaseGLSurface {
     @Override
     public void updateImage(ByteBuffer dataBuffer, int width, int height) {
         this.depthImage = dataBuffer;
-        this.width = width;
-        this.height = height;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
     }
 }
