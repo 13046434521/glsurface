@@ -45,7 +45,7 @@ public class DepthGLSurface extends BaseGLSurface {
         super.onDrawFrame(gl);
 
         if (mDepthRender != null) {
-            mDepthRender.onDraw(depthImage);
+            mDepthRender.onDraw(depthImage,mPreviewWidth,mPreviewHeight);
         }
     }
 
