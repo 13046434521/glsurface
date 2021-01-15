@@ -14,6 +14,6 @@ allprojects {
  2. Step 2. Add the dependency
 ```
 dependencies {
-  implementation 'com.github.13046434521:GLSurface:1.0.3'
+  implementation 'com.github.13046434521:GLSurface:1.0.4'
 }
 ```
