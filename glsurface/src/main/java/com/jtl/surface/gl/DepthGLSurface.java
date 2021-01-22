@@ -1,9 +1,11 @@
 package com.jtl.surface.gl;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 
 import com.jtl.surface.render.DepthRender;
+import com.jtl.surface.render.RectRender;
 
 import java.nio.ByteBuffer;
 
@@ -18,7 +20,9 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class DepthGLSurface extends BaseGLSurface {
     private DepthRender mDepthRender;
+    private RectRender rectRender;
     private ByteBuffer depthImage;
+    private Rect mRect;
 
     public DepthGLSurface(Context context) {
         super(context);
@@ -33,6 +37,9 @@ public class DepthGLSurface extends BaseGLSurface {
         super.onSurfaceCreated(gl, config);
         mDepthRender = new DepthRender();
         mDepthRender.createdGLThread(getContext().getApplicationContext());
+
+        rectRender = new RectRender();
+        rectRender.createGlThread(getContext().getApplicationContext());
     }
 
     @Override
@@ -45,7 +52,12 @@ public class DepthGLSurface extends BaseGLSurface {
         super.onDrawFrame(gl);
 
         if (mDepthRender != null) {
-            mDepthRender.onDraw(depthImage,mPreviewWidth,mPreviewHeight);
+            mDepthRender.onDraw(depthImage, mPreviewWidth, mPreviewHeight);
+        }
+
+
+        if (mRect != null) {
+            rectRender.draw(mRect, mPreviewWidth, mPreviewHeight);
         }
     }
 
@@ -59,5 +71,27 @@ public class DepthGLSurface extends BaseGLSurface {
         this.depthImage = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
+    }
+
+    public void updateRect(Rect rect) {
+        this.mRect = rect;
+    }
+
+    public void updateRect(Rect rect, int width, int height) {
+        this.mRect = rect;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
+    }
+
+    public void updateImage(ByteBuffer rgbImage, Rect rect) {
+        this.depthImage = rgbImage;
+        this.mRect = rect;
+    }
+
+    public void updateImage(ByteBuffer dataBuffer, Rect rect, int width, int height) {
+        this.depthImage = dataBuffer;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
+        this.mRect = rect;
     }
 }

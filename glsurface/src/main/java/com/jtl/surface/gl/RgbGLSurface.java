@@ -1,9 +1,11 @@
 package com.jtl.surface.gl;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.jtl.surface.render.RectRender;
 import com.jtl.surface.render.RgbRender;
 
 import java.nio.ByteBuffer;
@@ -19,9 +21,11 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class RgbGLSurface extends BaseGLSurface {
     private static final String TAG = RgbGLSurface.class.getSimpleName();
+    private RgbRender rgbRender;
+    private RectRender rectRender;
     private ByteBuffer rgbImage;
 
-    private RgbRender rgbRender;
+    private Rect mRect;
 
     public RgbGLSurface(Context context) {
         super(context);
@@ -43,6 +47,9 @@ public class RgbGLSurface extends BaseGLSurface {
 
         rgbRender = new RgbRender();
         rgbRender.createdGLThread(getContext().getApplicationContext());
+
+        rectRender = new RectRender();
+        rectRender.createGlThread(getContext().getApplicationContext());
     }
 
     @Override
@@ -59,10 +66,28 @@ public class RgbGLSurface extends BaseGLSurface {
             return;
         }
         rgbRender.onDraw(rgbImage, mPreviewWidth, mPreviewHeight);
+
+        if (mRect!=null){
+            rectRender.draw(mRect,mPreviewWidth,mPreviewHeight);
+        }
+    }
+    public void updateRect(Rect rect) {
+        this.mRect=rect;
+    }
+
+    public void updateRect(Rect rect, int width, int height) {
+        this.mRect=rect;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
     }
 
     public void updateImage(ByteBuffer rgbImage) {
         this.rgbImage = rgbImage;
+    }
+
+    public void updateImage(ByteBuffer rgbImage,Rect rect) {
+        this.rgbImage = rgbImage;
+        this.mRect=rect;
     }
 
     @Override
@@ -70,5 +95,12 @@ public class RgbGLSurface extends BaseGLSurface {
         this.rgbImage = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
+    }
+
+    public void updateImage(ByteBuffer dataBuffer, Rect rect,int width, int height) {
+        this.rgbImage = dataBuffer;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
+        this.mRect=rect;
     }
 }
