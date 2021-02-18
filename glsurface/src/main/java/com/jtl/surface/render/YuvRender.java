@@ -156,9 +156,8 @@ public class YuvRender implements IBaseRender {
             mUVBuffer.order(ByteOrder.nativeOrder());
             mUVBuffer.position(0);
 
-//            mYUVData = new byte[width * height * 3 / 2];
+            mYUVData = new byte[width * height * 3 / 2];
         }
-        mYUVData = new byte[width * height * 3 / 2];
 
         buffer.get(mYUVData, 0, width * height * 3 / 2).position(0);
         System.arraycopy(mYUVData, 0, mYData, 0, mYData.length);

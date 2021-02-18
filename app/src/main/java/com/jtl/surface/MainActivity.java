@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private YuvRender mYuvRender;
     private YRender mYRender;
     private ByteBuffer mByteBuffer;
+    private ByteBuffer mByteBuffer2;
     private int width = 1280;
     private int height = 960;
     private CountDownLatch mCountDownLatch = new CountDownLatch(1);
@@ -77,11 +78,14 @@ public class MainActivity extends AppCompatActivity {
                             mByteBuffer = ByteBuffer.allocateDirect(width * height * 3 / 2).order(ByteOrder.nativeOrder());
                             mByteBuffer = FileHelper.getInstance().readLocalFileByteBuffer(name, width * height * 3 / 2, mByteBuffer);
                         }
-
+                        if (mByteBuffer2 == null) {
+                            mByteBuffer2 = ByteBuffer.allocateDirect(width * height * 3 / 2).order(ByteOrder.nativeOrder());
+                            mByteBuffer2 = FileHelper.getInstance().readLocalFileByteBuffer(name, width * height * 3 / 2, mByteBuffer2);
+                        }
                         mBaseGLSurface.updateImage(mByteBuffer);
                         mBaseGLSurface.requestRender();
 
-                        mRgbGLSurface.updateImage(mByteBuffer);
+                        mRgbGLSurface.updateImage(mByteBuffer2);
                         mRgbGLSurface.requestRender();
                     }
                 } catch (InterruptedException e) {
