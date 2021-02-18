@@ -3,6 +3,7 @@ package com.jtl.surface.render;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.jtl.surface.helper.ShaderHelper;
 
@@ -155,9 +156,10 @@ public class YuvRender implements IBaseRender {
             mUVBuffer.order(ByteOrder.nativeOrder());
             mUVBuffer.position(0);
 
-            mYUVData = new byte[width * height * 3 / 2];
+//            mYUVData = new byte[width * height * 3 / 2];
         }
-        buffer.position(0);
+        mYUVData = new byte[width * height * 3 / 2];
+        Log.w("YOUYISI",mYUVData.length+"  "+width*height*3/2);
         buffer.get(mYUVData, 0, width * height * 3 / 2).position(0);
         System.arraycopy(mYUVData, 0, mYData, 0, mYData.length);
         System.arraycopy(mYUVData, mYData.length, mUVData, 0, mUVData.length);
