@@ -1,5 +1,7 @@
 package com.jtl.surface;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.jtl.surface.gl.BaseGLSurface;
@@ -12,10 +14,12 @@ import com.jtl.surface.render.YuvRender;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.security.Permission;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,14 +41,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mBaseGLSurface = findViewById(R.id.base);
         mRgbGLSurface = findViewById(R.id.yuv);
-        PermissionHelper.requestStoragePermission(this);
+
         mRgbRender = new RgbRender();
         depthRender = new DepthRender();
         mYuvRender = new YuvRender();
         mYRender = new YRender();
         mBaseGLSurface.setRender(mYuvRender);
-
         executorService = Executors.newFixedThreadPool(2);
+        if(PermissionHelper.hasStoragePermission(this)){
+            init();
+        }else{
+            PermissionHelper.requestStoragePermission(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            init();
+        }else{
+            PermissionHelper.requestStoragePermission(MainActivity.this);
+        }
+    }
+
+    private void init(){
         executorService.submit(new Runnable() {
             @Override
             public void run() {
