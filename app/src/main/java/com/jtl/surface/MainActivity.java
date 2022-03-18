@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                             mByteBuffer2 = ByteBuffer.allocateDirect(width * height * 3 / 2).order(ByteOrder.nativeOrder());
                             mByteBuffer2 = FileHelper.getInstance().readLocalFileByteBuffer(name, width * height * 3 / 2, mByteBuffer2);
                         }
+
                         mBaseGLSurface.updateImage(mByteBuffer);
                         mBaseGLSurface.requestRender();
 
