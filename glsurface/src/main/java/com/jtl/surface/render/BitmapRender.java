@@ -20,7 +20,7 @@ import static android.opengl.GLES20.GL_TEXTURE_2D;
  * RgbRender
  *
  * @author jtl
- * @date 2019/9/26
+ * @date 2022/3/18
  */
 public class BitmapRender implements IBaseRender<Bitmap> {
     private static final String TAG = BitmapRender.class.getSimpleName();
