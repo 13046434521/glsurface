@@ -61,12 +61,12 @@ public class YuvGLSurface extends BaseGLSurface {
     }
 
     @Override
-    public void updateImage(ByteBuffer dataBuffer) {
+    public void updataImage(ByteBuffer dataBuffer) {
         mYUVBuffer = dataBuffer;
     }
 
     @Override
-    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+    public void updataImage(ByteBuffer dataBuffer, int width, int height) {
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
         mYUVBuffer = dataBuffer;

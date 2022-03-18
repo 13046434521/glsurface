@@ -2,6 +2,7 @@ package com.jtl.surface.gl;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -79,11 +80,11 @@ public class BaseGLSurface extends GLSurfaceView implements GLSurfaceView.Render
         }
     }
 
-    public void updateImage(ByteBuffer dataBuffer) {
+    public void updataImage(ByteBuffer dataBuffer) {
         this.mDataBuffer = dataBuffer;
     }
 
-    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+    public void updataImage(ByteBuffer dataBuffer, int width, int height) {
         this.mDataBuffer = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;

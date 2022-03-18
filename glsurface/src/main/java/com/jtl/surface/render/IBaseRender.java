@@ -10,13 +10,13 @@ import java.nio.ByteBuffer;
  * 描述: BaseRender接口
  * 更改:
  */
-public interface IBaseRender {
+public   interface  IBaseRender<T> {
 
     void createdGLThread(Context context);
 
     void onSurfaceChanged(float width, float height);
 
-    void onDraw(ByteBuffer buffer);
+    void onDraw(T buffer);
 
-    void onDraw(ByteBuffer buffer, int width, int height);
+    void onDraw(T buffer, int width, int height);
 }

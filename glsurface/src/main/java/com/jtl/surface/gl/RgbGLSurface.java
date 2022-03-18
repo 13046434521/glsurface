@@ -1,10 +1,12 @@
 package com.jtl.surface.gl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.jtl.surface.render.BitmapRender;
 import com.jtl.surface.render.RectRender;
 import com.jtl.surface.render.RgbRender;
 
@@ -23,10 +25,12 @@ public class RgbGLSurface extends BaseGLSurface {
     private static final String TAG = RgbGLSurface.class.getSimpleName();
     private RgbRender rgbRender;
     private RectRender rectRender;
+    private BitmapRender bitmapRender;
     private ByteBuffer rgbImage;
 
     private Rect mRect;
-
+    private Rect[] mRects;
+    private Bitmap bitmap;
     public RgbGLSurface(Context context) {
         super(context);
     }
@@ -49,7 +53,10 @@ public class RgbGLSurface extends BaseGLSurface {
         rgbRender.createdGLThread(getContext().getApplicationContext());
 
         rectRender = new RectRender();
-        rectRender.createGlThread(getContext().getApplicationContext());
+        rectRender.createdGLThread(getContext().getApplicationContext());
+
+        bitmapRender = new BitmapRender();
+        bitmapRender.createdGLThread(getContext().getApplicationContext());
     }
 
     @Override
@@ -66,13 +73,30 @@ public class RgbGLSurface extends BaseGLSurface {
             return;
         }
         rgbRender.onDraw(rgbImage, mPreviewWidth, mPreviewHeight);
-
+        if (bitmap!=null){
+            bitmapRender.onDraw(bitmap);
+        }
         if (mRect!=null){
-            rectRender.draw(mRect,mPreviewWidth,mPreviewHeight);
+            rectRender.onDraw(mRect,mPreviewWidth,mPreviewHeight);
+        }
+
+        if (mRects!=null){
+            for (Rect rect :mRects) {
+                rectRender.onDraw(rect,mPreviewWidth,mPreviewHeight);
+            }
         }
     }
+
     public void updateRect(Rect rect) {
         this.mRect=rect;
+    }
+
+    public void updateBitmap(Bitmap bitmap){
+        this.bitmap = bitmap;
+    }
+
+    public void updateRects(Rect[] rects) {
+        this.mRects=rects;
     }
 
     public void updateRect(Rect rect, int width, int height) {
@@ -81,26 +105,38 @@ public class RgbGLSurface extends BaseGLSurface {
         this.mPreviewHeight = height;
     }
 
-    public void updateImage(ByteBuffer rgbImage) {
+    public void updataImage(ByteBuffer rgbImage) {
         this.rgbImage = rgbImage;
     }
 
-    public void updateImage(ByteBuffer rgbImage,Rect rect) {
+    public void updataImage(ByteBuffer rgbImage, Rect rect) {
         this.rgbImage = rgbImage;
         this.mRect=rect;
     }
 
     @Override
-    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+    public void updataImage(ByteBuffer dataBuffer, int width, int height) {
         this.rgbImage = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
     }
 
-    public void updateImage(ByteBuffer dataBuffer, Rect rect,int width, int height) {
+    public void updataImage(ByteBuffer dataBuffer, Rect rect, int width, int height) {
         this.rgbImage = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
         this.mRect=rect;
+    }
+
+    public void setRectColor(float[] color){
+        rectRender.setRectColor(color);
+    }
+
+    public void clearRect(){
+        mRect = null;
+    }
+
+    public void clearRects(){
+        mRects = null;
     }
 }

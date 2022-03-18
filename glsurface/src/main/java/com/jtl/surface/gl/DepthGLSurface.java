@@ -39,7 +39,7 @@ public class DepthGLSurface extends BaseGLSurface {
         mDepthRender.createdGLThread(getContext().getApplicationContext());
 
         rectRender = new RectRender();
-        rectRender.createGlThread(getContext().getApplicationContext());
+        rectRender.createdGLThread(getContext().getApplicationContext());
     }
 
     @Override
@@ -57,17 +57,17 @@ public class DepthGLSurface extends BaseGLSurface {
 
 
         if (mRect != null) {
-            rectRender.draw(mRect, mPreviewWidth, mPreviewHeight);
+            rectRender.onDraw(mRect, mPreviewWidth, mPreviewHeight);
         }
     }
 
     @Override
-    public void updateImage(ByteBuffer dataBuffer) {
+    public void updataImage(ByteBuffer dataBuffer) {
         this.depthImage = dataBuffer;
     }
 
     @Override
-    public void updateImage(ByteBuffer dataBuffer, int width, int height) {
+    public void updataImage(ByteBuffer dataBuffer, int width, int height) {
         this.depthImage = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
@@ -83,12 +83,12 @@ public class DepthGLSurface extends BaseGLSurface {
         this.mPreviewHeight = height;
     }
 
-    public void updateImage(ByteBuffer rgbImage, Rect rect) {
+    public void updataImage(ByteBuffer rgbImage, Rect rect) {
         this.depthImage = rgbImage;
         this.mRect = rect;
     }
 
-    public void updateImage(ByteBuffer dataBuffer, Rect rect, int width, int height) {
+    public void updataImage(ByteBuffer dataBuffer, Rect rect, int width, int height) {
         this.depthImage = dataBuffer;
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;

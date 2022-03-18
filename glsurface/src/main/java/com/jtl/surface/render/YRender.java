@@ -16,7 +16,7 @@ import java.nio.FloatBuffer;
  * 描述:渲染YUV的Y分量
  * 更改:
  */
-public class YRender implements IBaseRender {
+public class YRender implements IBaseRender<ByteBuffer> {
     private static final String TAG = YRender.class.getSimpleName();
     private static final String VERTEX_SHADER_NAME = "shader/yuv_y_vert.glsl";
     private static final String FRAGMENT_SHADER_NAME = "shader/yuv_y_frag.glsl";

@@ -17,7 +17,7 @@ import java.nio.FloatBuffer;
  * 描述:渲染YUV_420SP NV12数据，排列顺序为,4个Y公用一个UV分量 YYYYYYYYUVUV
  * 更改:
  */
-public class YuvRender implements IBaseRender {
+public class YuvRender implements IBaseRender<ByteBuffer> {
     private static final String TAG = YuvRender.class.getSimpleName();
     private static final String VERTEX_SHADER_NAME = "shader/yuv420_nv12_vert.glsl";
     private static final String FRAGMENT_SHADER_NAME = "shader/yuv420_nv12_frag.glsl";

@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import androidx.annotation.Nullable;
 
 /**
  * RgbRender
@@ -17,7 +16,7 @@ import androidx.annotation.Nullable;
  * @author jtl
  * @date 2019/9/26
  */
-public class RgbRender implements IBaseRender {
+public class RgbRender implements IBaseRender<ByteBuffer> {
     private static final String TAG = RgbRender.class.getSimpleName();
     /**
      * 顶点着色器(彩色图)
@@ -129,7 +128,7 @@ public class RgbRender implements IBaseRender {
         onDraw(rgbData, mWidth, mHeight);
     }
 
-    public void onDraw(@Nullable ByteBuffer rgbData, @Nullable int width, @Nullable int height) {
+    public void onDraw( ByteBuffer rgbData,  int width,  int height) {
         mWidth = width;
         mHeight = height;
 

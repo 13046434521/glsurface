@@ -17,7 +17,7 @@ import java.nio.FloatBuffer;
  * @author jtl
  * @date 2019/9/26
  */
-public class RectRender {
+public class RectRender implements IBaseRender<Rect>{
     private static final String TAG =  RectRender.class.getSimpleName();
     private static final String VERTEX_SHADER_NAME = "shader/RectShader.vert";
     private static final String FRAGMENT_SHADER_NAME = "shader/RectShader.frag";
@@ -27,19 +27,21 @@ public class RectRender {
     private static final int BYTES_PER_FLOAT = 4;
     private final float[] rectColor = {1.0f, 0.0f, 0.0f, 1.0f};
     private final float[] greenColor = {0.0f, 1.0f, 0.0f, 1.0f};
+    private float[] fixColor = {1.0f, 2.0f, 0.0f, 1.0f};
     private final float[] blueColor = {0.0f, 0.0f, 1.0f, 1.0f};
-    private final float[] fixColor = {1.0f, 2.0f, 0.0f, 1.0f};
     private int programHandle;
     private int vertexHandle;
     private int colorHandle;
     private FloatBuffer vertexBuffer;
     private float[] rectData = new float[16];
-
+    private int width;
+    private int height;
     public RectRender() {
         vertexBuffer = ByteBuffer.allocateDirect(VERTEX_NUM * COMPONENTS_PER_VERTEX * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
     }
 
-    public void createGlThread(Context context) {
+    @Override
+    public void createdGLThread(Context context) {
         int vertexShader = ShaderHelper.loadGLShader(TAG, context, GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_NAME);
         int fragmentShader = ShaderHelper.loadGLShader(TAG, context, GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_NAME);
 
@@ -59,8 +61,17 @@ public class RectRender {
         ShaderHelper.checkGLError("createGlThread");
     }
 
+    public void setRectColor( float[] fixColor){
+        this.fixColor = fixColor;
+    }
 
-    public void draw(Rect rect, float imageWidth, float imageHeight) {
+    @Override
+    public void onDraw(Rect rect) {
+        onDraw(rect, width, height);
+    }
+
+    @Override
+    public void onDraw(Rect rect, int imageWidth, int imageHeight) {
         float halfWidth = imageWidth / 2;
         float halfHeight = imageHeight / 2;
 
@@ -111,5 +122,12 @@ public class RectRender {
         GLES20.glDrawArrays(GLES20.GL_POINTS, 3, 1);
         GLES20.glUseProgram(0);
         ShaderHelper.checkGLError("draw");
+    }
+
+
+    @Override
+    public void onSurfaceChanged(float width, float height) {
+        this.width = (int) width;
+        this.height = (int) height;
     }
 }
