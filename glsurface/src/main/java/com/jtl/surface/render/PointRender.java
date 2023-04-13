@@ -43,24 +43,20 @@ public class PointRender implements IBaseRender<Point>{
 
         int frag = ShaderHelper.loadGLShader(TAG,context,GLES20.GL_FRAGMENT_SHADER,FRAGMENT_SHADER_NAME);
         int vertex =ShaderHelper.loadGLShader(TAG,context,GLES20.GL_VERTEX_SHADER,VERTEX_SHADER_NAME);
-        ShaderHelper.checkGLError("createGlThread");
+
         GLES20.glAttachShader(program,frag);
         GLES20.glAttachShader(program,vertex);
-        ShaderHelper.checkGLError("createGlThread");
+
         GLES20.glLinkProgram(program);
-        ShaderHelper.checkGLError("createGlThread");
         GLES20.glUseProgram(program);
 
-        ShaderHelper.checkGLError("createGlThread");
         a_Position = GLES20.glGetAttribLocation(program,"a_Position");
-        ShaderHelper.checkGLError("createGlThread");
         a_Color = GLES20.glGetAttribLocation(program,"a_Color");
-
         a_PointSize = GLES20.glGetUniformLocation(program,"a_PointSize");
-        ShaderHelper.checkGLError("createGlThread");
+
         GLES20.glDetachShader(program,frag);
         GLES20.glDetachShader(program,vertex);
-        ShaderHelper.checkGLError("createGlThread");
+
         GLES20.glDeleteShader(frag);
         GLES20.glDeleteShader(vertex);
 
