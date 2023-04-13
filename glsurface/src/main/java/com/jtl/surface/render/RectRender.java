@@ -96,6 +96,7 @@ public class RectRender implements IBaseRender<Rect>{
         rectData[14] = 0;
         rectData[15] = 1;
 
+        // 映射到OpenGL坐标系上，中心为(0，0)
         for (int i = 0; i < rectData.length; i += 4) {
             rectData[i + 0] = (rectData[i + 0] - halfWidth) / halfWidth;
             rectData[i + 1] = -(rectData[i + 1] - halfHeight) / halfHeight;

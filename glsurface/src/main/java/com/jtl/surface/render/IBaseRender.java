@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
  * 描述: BaseRender接口
  * 更改:
  */
-public   interface  IBaseRender<T> {
+public interface  IBaseRender<T> {
 
     void createdGLThread(Context context);
 

@@ -2,11 +2,13 @@ package com.jtl.surface.gl;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 
 import com.jtl.surface.render.BitmapRender;
+import com.jtl.surface.render.PointRender;
 import com.jtl.surface.render.RectRender;
 import com.jtl.surface.render.RgbRender;
 
@@ -24,12 +26,18 @@ import javax.microedition.khronos.opengles.GL10;
 public class RgbGLSurface extends BaseGLSurface {
     private static final String TAG = RgbGLSurface.class.getSimpleName();
     private RgbRender rgbRender;
+
+    private PointRender pointRender;
     private RectRender rectRender;
     private BitmapRender bitmapRender;
     private ByteBuffer rgbImage;
 
     private Rect mRect;
     private Rect[] mRects;
+
+    private Point mPoint;
+
+    private Point[] mPoints;
     private Bitmap bitmap;
     public RgbGLSurface(Context context) {
         super(context);
@@ -51,6 +59,9 @@ public class RgbGLSurface extends BaseGLSurface {
 
         rgbRender = new RgbRender();
         rgbRender.createdGLThread(getContext().getApplicationContext());
+
+        pointRender = new PointRender();
+        pointRender.createdGLThread(getContext().getApplicationContext());
 
         rectRender = new RectRender();
         rectRender.createdGLThread(getContext().getApplicationContext());
@@ -85,6 +96,15 @@ public class RgbGLSurface extends BaseGLSurface {
                 rectRender.onDraw(rect,mPreviewWidth,mPreviewHeight);
             }
         }
+        if (mPoint!=null){
+            pointRender.onDraw(mPoint,mPreviewWidth,mPreviewHeight);
+        }
+
+        if (mPoints!=null){
+            for (Point point :mPoints) {
+                pointRender.onDraw(point,mPreviewWidth,mPreviewHeight);
+            }
+        }
     }
 
     public void updateRect(Rect rect) {
@@ -104,6 +124,21 @@ public class RgbGLSurface extends BaseGLSurface {
         this.mPreviewWidth = width;
         this.mPreviewHeight = height;
     }
+
+    public void updatePoint(Point point) {
+        this.mPoint=point;
+    }
+
+    public void updatePoints(Point[] points) {
+        this.mPoints=points;
+    }
+
+    public void updatePoint(Point point, int width, int height) {
+        this.mPoint=point;
+        this.mPreviewWidth = width;
+        this.mPreviewHeight = height;
+    }
+
 
     public void updataImage(ByteBuffer rgbImage) {
         this.rgbImage = rgbImage;
