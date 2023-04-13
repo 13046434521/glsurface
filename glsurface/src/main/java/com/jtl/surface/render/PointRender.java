@@ -90,7 +90,6 @@ public class PointRender implements IBaseRender<Point>{
         float halfWidth = width / 2;
         float halfHeight = height / 2;
 
-
         pointData[0] = (point.x - halfWidth) / halfWidth;
         pointData[1] = -(point.y - halfHeight) / halfHeight;
 
