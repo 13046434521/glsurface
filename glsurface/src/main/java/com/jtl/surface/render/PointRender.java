@@ -94,7 +94,7 @@ public class PointRender implements IBaseRender<Point>{
         pointData[0] = (point.x - halfWidth) / halfWidth;
         pointData[1] = -(point.y - halfHeight) / halfHeight;
 
-        vertexBuffer.get(pointData).position(0);
+        vertexBuffer.put(pointData).position(0);
 
         GLES20.glEnableVertexAttribArray(a_Position);
         GLES20.glEnableVertexAttribArray(a_Color);
